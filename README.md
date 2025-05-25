@@ -1,40 +1,49 @@
-Proyecto: servidor de backups incrementales y automatizados
+PROYECTO: SERVIDOR DE BACKUPS INCREMENTALES Y AUTOMATIZADOS
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+RESUMEN
 
-Resumen  
 Este proyecto trata sobre montar un sistema de respaldo seguro, cifrado y automatizado usando herramientas comunes en Linux. La idea es hacer backups incrementales, comprimidos y deduplicados de directorios importantes del sistema, y que el resultado se notifique automáticamente por correo. Todo sobre un ordenador con Ubuntu Zorin OS, y está pensado para ejecutarse a diario de forma programada usando cron.
 
-Objetivos  
+OBJETIVOS
+
 - Configurar un sistema de backups cifrados e incrementales.  
 - Automatizar los respaldos con cron y bash scripting.  
 - Comprimir y deduplicar la información respaldada con borgbackup.  
 - Implementar notificaciones por correo electrónico usando msmtp.  
 - Probar la recuperación de archivos respaldados ante fallos o pérdida de datos.
 
-Tecnologías Utilizadas  
+TECNOLOGÍAS UTILIZADAS
+
 - Sistema Operativo: Ubuntu Zorin OS  
 - Herramientas: borgbackup, cron, bash, msmtp  
 - Seguridad: Repositorio cifrado con repokey  
 - Notificaciones: Envío de correos mediante servidor SMTP  
 
-1. Preparación del sistema  
+PREPARACIÓN DEL SISTEMA
+
 1. Actualización de paquetes:
 sudo apt update && sudo apt upgrade -y
 
-2. Instalación de herramientas  
-1. Instalación de BorgBackup y msmtp:
+INSTALACIÓN DE HERRAMIENTAS
+
+1. Instalación de borgbackup y msmtp:
 sudo apt install borgbackup msmtp msmtp-mta -y
 
-3. Inicialización del repositorio de backup  
-1. (Opcional) Crear un usuario exclusivo para backups:
-sudo adduser backup
+INICIALIZACIÓN DEL REPOSITORIO DEL BACKUP
+
+1. (Opcional) Crear un usuario backup propietario del repositorio
+sudo useradd backup
+
 2. Crear el directorio del repositorio y asignar permisos:
 sudo mkdir -p /backup/repositorio
 sudo chown backup:backup /backup/repositorio
-3. Inicializar el repositorio cifrado:
-sudo -u backup borg init --encryption=repokey /backup/repositorio
-Aquí se pedirá la contraseña con la que cifraremos el repositorio.
 
-4. Script de backup automatizado  
+4. Inicializar el repositorio cifrado:
+sudo -u backup borg init --encryption=repokey /backup/repositorio
+(Aquí se pedirá la contraseña con la que cifraremos el repositorio)
+
+SCRIPT DE BACKUP AUTOMATIZADO
+
 1. Crear el script en /usr/local/bin/backup_borg.sh:
 #!/bin/bash
 export BORG_REPO=/backup/repositorio
@@ -55,13 +64,15 @@ fi
 2. Dar permisos de ejecución:
 sudo chmod +x /usr/local/bin/backup_borg.sh
 
-5. Automatización con cron  
+AUTOMATIZACIÓN CON CRON
+
 Programar el backup diario a las 02:00 AM:
 sudo crontab -e
 Agregar la línea:
 0 2 * * * /usr/local/bin/backup_borg.sh
 
-6. Configuración de msmtp  
+CONFIGURACIÓN DE MSMTP PARA EL ENVÍO DE NOTIFICACIÓN POR CORREO
+
 1. Crear y editar /etc/msmtprc:
 defaults
 auth on
@@ -81,7 +92,8 @@ account default : gmail
 2. Establecer permisos adecuados:
 sudo chmod 600 /etc/msmtprc
 
-7. Verificación y pruebas  
+VERIFICACIÓN Y PRUEBAS
+
 Ejecutar manualmente el script:
 sudo /usr/local/bin/backup_borg.sh
 
@@ -90,13 +102,15 @@ Verificar:
 - Que llegue un correo con el estado del backup  
 - Revisar logs si hay errores
 
-8. Recuperación de archivos  
+RECUPERACIÓN DE ARCHIVOS
+
 1. Listar backups:
 borg list /backup/repositorio
 2. Recuperar archivos específicos:
 borg extract /backup/repositorio::backup-2025-05-10_02-00 etc/passwd
 
-Lecciones aprendidas  
+LECCIONES APRENDIDAS
+
 - Automatización y seguridad: Aprendí a implementar un sistema de respaldo robusto y automatizado, con foco en la seguridad y la eficiencia del almacenamiento.  
 - Scripting y cron: Reforcé habilidades en bash scripting y programación de tareas en cron.  
 - Notificación y monitoreo: Integré notificaciones vía correo como parte del monitoreo básico.
