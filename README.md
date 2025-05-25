@@ -31,7 +31,7 @@ sudo apt install borgbackup msmtp msmtp-mta -y
 
 INICIALIZACIÓN DEL REPOSITORIO DEL BACKUP
 
-1. (Opcional) Crear un usuario backup propietario del repositorio
+1. (Opcional) Crear un usuario backup propietario del repositorio:
 sudo useradd backup
 
 2. Crear el directorio del repositorio y asignar permisos:
