@@ -44,7 +44,8 @@ sudo -u backup borg init --encryption=repokey /backup/repositorio
 
 SCRIPT DE BACKUP AUTOMATIZADO
 
-1. Crear el script en /usr/local/bin/backup_borg.sh:
+1. Crear el script en /usr/local/bin/backup_borg.sh
+
 #!/bin/bash
 export BORG_REPO=/backup/repositorio
 export BORG_PASSPHRASE='la contraseña de antes'
